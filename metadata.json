@@ -66,10 +66,6 @@
     },
     {
       "version_requirement": ">= 0.0.0",
-      "name": "CERNOps/voms"
-    },
-    {
-      "version_requirement": ">= 0.0.0",
       "name": "erwbgy/limits"
     },
     {
