@@ -9,9 +9,9 @@ class fts::install (
   $monitoring_version = $fts::params::monitoring_version
 ) inherits fts::params {
 
-  #Package {
-  #  ensure => latest
-  #}
+  Package {
+    ensure => latest
+  }
   
   package{'httpd': }
 
@@ -29,7 +29,7 @@ class fts::install (
 
   # Specify an order in case an explicit version is set.
   package{['fts-server','fts-client','fts-libs','fts-infosys','fts-msg','fts-server-selinux']:
-    ensure  => $version,
+    #ensure  => $version,
     require => $require_repo
   }
   # The rpm dependency is present but we must get the correct
