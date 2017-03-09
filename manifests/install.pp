@@ -9,40 +9,41 @@ class fts::install (
   $monitoring_version = $fts::params::monitoring_version
 ) inherits fts::params {
 
-  package{'httpd':
-    ensure => present
+  #Package {
+  #  ensure => latest
+  #}
+  
+  package{'httpd': }
+
+  if $fts3_repo {
+    yumrepo {'fts':
+      descr       => 'FTS service',
+      baseurl     => $fts3_repo,
+      gpgcheck    => '0',
+      priority    => '15',
+      enabled     => '1',
+      includepkgs => join($repo_includepkgs,',')
+    }
+    $require_repo = Yumrepo['fts']
   }
 
   # Specify an order in case an explicit version is set.
-
   package{['fts-server','fts-client','fts-libs','fts-infosys','fts-msg','fts-server-selinux']:
     ensure  => $version,
-    require => Yumrepo['fts']
+    require => $require_repo
   }
   # The rpm dependency is present but we must get the correct
   # version fts-libs in stalled first rather than as a
   # dependency of fts-mysql.
   package{"fts-${db_type}":
-    ensure  => $version,
     require => Package['fts-libs']
   }
 
   package{['fts-monitoring','fts-monitoring-selinux']:
-    ensure  => $monitoring_version,
-    require => Yumrepo['fts']
+    require => $require_repo
   }
   package{['fts-rest','fts-rest-selinux']:
-    ensure  => $rest_version,
-    require => Yumrepo['fts']
-  }
-
-  yumrepo {'fts':
-    descr       => 'FTS service',
-    baseurl     => $fts3_repo,
-    gpgcheck    => '0',
-    priority    => '15',
-    enabled     => '1',
-    includepkgs => join($repo_includepkgs,',')
+    require => $require_repo
   }
 
   # Install oracle client if needed.
