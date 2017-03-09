@@ -9,9 +9,9 @@ class fts::install (
   $monitoring_version = $fts::params::monitoring_version
 ) inherits fts::params {
 
-  Package {
-    ensure => latest
-  }
+  #Package {
+  #  ensure => latest
+  #}
   
   package{'httpd': }
 
@@ -29,6 +29,7 @@ class fts::install (
 
   # Specify an order in case an explicit version is set.
   package{['fts-server','fts-client','fts-libs','fts-infosys','fts-msg','fts-server-selinux']:
+    ensure  => latest,
     #ensure  => $version,
     #require => $require_repo
   }
@@ -36,13 +37,16 @@ class fts::install (
   # version fts-libs in stalled first rather than as a
   # dependency of fts-mysql.
   package{"fts-${db_type}":
+    ensure => latest,
     require => Package['fts-libs']
   }
 
   package{['fts-monitoring','fts-monitoring-selinux']:
+    ensure => latest,
     #require => $require_repo
   }
   package{['fts-rest','fts-rest-selinux']:
+    ensure => latest,
     #require => $require_repo
   }
 
