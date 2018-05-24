@@ -1,7 +1,7 @@
 #Class: fts::service
 class fts::service {
 
-  include ('fetchcrl')
+  #include ('fetchcrl')
 
   service{'fts-server':
     ensure    => running,
@@ -33,7 +33,8 @@ class fts::service {
   service{'httpd':
     ensure    => running,
     enable    => true,
-    subscribe => [Package['fts-rest'], Class['fetchcrl']]
+    #subscribe => [Package['fts-rest'], Class['fetchcrl']]
+    subscribe => [Package['fts-rest'], Package['fetch-crl']]
   }
 
   service{['bdii','fts-info-publisher']:
